@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static GameManager instance;
 
     public bool isHoldingGun = false;
+    private bool playerDetected = false;
 
     [SerializeField] private GameObject sizeGun;
     [SerializeField] private GameObject gravityGun;
@@ -20,9 +21,9 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -76,7 +77,31 @@ void Start()
             UnequipGun();
         }
     }
+    public void AlertAllEnemies()
+    {
+        if (!playerDetected)
+        {
+            EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
+            foreach (EnemyAI enemy in enemies)
+            {
+                enemy.PlayerDetected();
+            }
+            playerDetected = true;
+        }
+    }
 
+    public void PlayerLost()
+    {
+        if (playerDetected)
+        {
+            EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
+            foreach (EnemyAI enemy in enemies)
+            {
+                enemy.LostPlayer();
+            }
+            playerDetected = false;
+        }
+    }
 void EquipGun(int gunIndex)
 {
     if (inventory.TryGetValue(gunIndex, out GameObject gun))
