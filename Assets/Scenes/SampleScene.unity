@@ -691,6 +691,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSizeMultiplier: 3
   minSizeMultiplier: 0.33333334
+  dustParticlePrefab: {fileID: 1599718021928974, guid: 21461e6c060baf044ac3e717ed4170cb, type: 3}
+  impactSound: {fileID: 8300000, guid: 89a8082114499c64f8627b9a79d65fc1, type: 3}
+  impactSpeedThreshold: 5
 --- !u!1 &1637767748
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,6 +892,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1592164773709576, guid: 9390e70d13c7e454f8022d50d0112dc7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 1893114798651238, guid: 9390e70d13c7e454f8022d50d0112dc7, type: 3}
       propertyPath: m_Name
       value: Sideway 12 prefab
@@ -899,7 +906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4327670655549164, guid: 9390e70d13c7e454f8022d50d0112dc7, type: 3}
       propertyPath: m_LocalScale.x
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4327670655549164, guid: 9390e70d13c7e454f8022d50d0112dc7, type: 3}
       propertyPath: m_LocalScale.y
@@ -907,7 +914,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4327670655549164, guid: 9390e70d13c7e454f8022d50d0112dc7, type: 3}
       propertyPath: m_LocalScale.z
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4327670655549164, guid: 9390e70d13c7e454f8022d50d0112dc7, type: 3}
       propertyPath: m_LocalPosition.x
