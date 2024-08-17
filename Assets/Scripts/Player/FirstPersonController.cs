@@ -2,13 +2,15 @@ using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour
 {
+
+    private Vector3 targetScale;
     public float moveSpeed = 5f;
     public float gravity = -9.81f;
     public float jumpHeight = 2f;
     public CharacterController controller; // Assign in Inspector
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-
+public float sprintSpeed = 10f;
     private Vector3 velocity;
     private bool isGrounded;
 
@@ -16,6 +18,9 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 originalScale;
     private Vector3 originalControllerCenter;
     private float originalControllerHeight;
+
+
+    private bool isShrinking = false;
 
         private Animator animator; // Reference to the Animator component
 
@@ -48,10 +53,11 @@ public class FirstPersonController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        Vector3 moveDirection = transform.right * horizontalInput + transform.forward * verticalInput;
-        controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+        // Calculate movement speed
+        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : moveSpeed; 
 
-        // Calculate and apply movement speed to the animator
+        Vector3 moveDirection = transform.right * horizontalInput + transform.forward * verticalInput;
+        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
         float movementSpeed = moveDirection.magnitude; 
         animator.SetFloat("Speed", movementSpeed);
 
@@ -64,6 +70,8 @@ public class FirstPersonController : MonoBehaviour
         // Apply gravity
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime); 
+
+        
     }
 
     void ToggleShrink()
