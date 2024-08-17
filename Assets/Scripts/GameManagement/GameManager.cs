@@ -6,13 +6,15 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     public bool isHoldingGun = false;
-    
+
     [SerializeField] private GameObject sizeGun;
     [SerializeField] private GameObject gravityGun;
     [SerializeField] private Transform gunParent; // Assign this to your camera or hand transform in the inspector
 
     private GameObject currentGun;
     private Dictionary<int, GameObject> inventory;
+
+    private HideArms hideArmsScript;
 
     void Awake()
     {
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
         }
 
         InitializeInventory();
+        hideArmsScript = FindObjectOfType<HideArms>();
     }
 
     void InitializeInventory()
@@ -76,6 +79,13 @@ public class GameManager : MonoBehaviour
             currentGun.SetActive(true);
             currentGun.transform.localPosition = Vector3.zero; // Reset local position
             currentGun.transform.localRotation = Quaternion.identity; // Reset local rotation
+
+            // Hide arms when holding a gun
+            if (hideArmsScript != null)
+            {
+                hideArmsScript.ApplyHideMaterial();
+                isHoldingGun = true;
+            }
         }
     }
 
@@ -86,7 +96,13 @@ public class GameManager : MonoBehaviour
             // Disable the current gun instead of destroying it
             currentGun.SetActive(false);
             currentGun = null;
-            isHoldingGun = false;
+
+            // Show arms when no gun is held
+            if (hideArmsScript != null)
+            {
+                hideArmsScript.RestoreOriginalMaterials();
+                isHoldingGun = false;
+            }
         }
     }
 }

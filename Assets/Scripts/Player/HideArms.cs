@@ -29,7 +29,7 @@ public class HideArms : MonoBehaviour
     private void Start()
     {
         renderers = GetComponentsInChildren<SkinnedMeshRenderer>();
-        
+
         // Store original materials
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
@@ -37,19 +37,7 @@ public class HideArms : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (GameManager.Instance.isHoldingGun)
-        {
-            HideArmsLogic();
-        }
-        else
-        {
-            ShowArmsLogic();
-        }
-    }
-
-    private void HideArmsLogic()
+    public void ApplyHideMaterial()
     {
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
@@ -72,7 +60,7 @@ public class HideArms : MonoBehaviour
         }
     }
 
-    private void ShowArmsLogic()
+    public void RestoreOriginalMaterials()
     {
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
