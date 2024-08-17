@@ -8,7 +8,7 @@ public class FirstPersonController : MonoBehaviour
     public CharacterController controller; // Assign in Inspector
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
-
+public float sprintSpeed = 10f;
     private Vector3 velocity;
     private bool isGrounded;
 
@@ -48,10 +48,11 @@ public class FirstPersonController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
-        Vector3 moveDirection = transform.right * horizontalInput + transform.forward * verticalInput;
-        controller.Move(moveDirection * moveSpeed * Time.deltaTime);
+        // Calculate movement speed
+        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : moveSpeed; 
 
-        // Calculate and apply movement speed to the animator
+        Vector3 moveDirection = transform.right * horizontalInput + transform.forward * verticalInput;
+        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
         float movementSpeed = moveDirection.magnitude; 
         animator.SetFloat("Speed", movementSpeed);
 
