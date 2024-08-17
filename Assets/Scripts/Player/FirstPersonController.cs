@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour
 {
+
+    private Vector3 targetScale;
     public float moveSpeed = 5f;
     public float gravity = -9.81f;
     public float jumpHeight = 2f;
@@ -16,6 +18,9 @@ public float sprintSpeed = 10f;
     private Vector3 originalScale;
     private Vector3 originalControllerCenter;
     private float originalControllerHeight;
+
+
+    private bool isShrinking = false;
 
         private Animator animator; // Reference to the Animator component
 
@@ -65,6 +70,8 @@ public float sprintSpeed = 10f;
         // Apply gravity
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime); 
+
+        
     }
 
     void ToggleShrink()
