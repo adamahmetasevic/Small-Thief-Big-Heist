@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject gravityGun;
     [SerializeField] private Transform gunParent; // Assign this to your camera or hand transform in the inspector
 
+    [SerializeField] private GameObject crosshair;
+
     private GameObject currentGun;
     private Dictionary<int, GameObject> inventory;
 
@@ -32,7 +34,14 @@ public class GameManager : MonoBehaviour
         InitializeInventory();
         hideArmsScript = FindObjectOfType<HideArms>();
     }
-
+void Start()
+{
+    // Hide crosshair at the start
+    if (crosshair != null)
+    {
+        crosshair.SetActive(false);
+    }
+}
     void InitializeInventory()
     {
         inventory = new Dictionary<int, GameObject>
@@ -68,41 +77,52 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void EquipGun(int gunIndex)
+void EquipGun(int gunIndex)
+{
+    if (inventory.TryGetValue(gunIndex, out GameObject gun))
     {
-        if (inventory.TryGetValue(gunIndex, out GameObject gun))
+        UnequipGun(); // Unequip current gun if any
+
+        // Set the gun as a child of the gunParent and enable it
+        currentGun = gun;
+        currentGun.SetActive(true);
+        currentGun.transform.localPosition = Vector3.zero; // Reset local position
+        currentGun.transform.localRotation = Quaternion.identity; // Reset local rotation
+
+        // Show crosshair and hide arms when holding a gun
+        if (crosshair != null)
         {
-            UnequipGun(); // Unequip current gun if any
+            crosshair.SetActive(true);
+        }
 
-            // Set the gun as a child of the gunParent and enable it
-            currentGun = gun;
-            currentGun.SetActive(true);
-            currentGun.transform.localPosition = Vector3.zero; // Reset local position
-            currentGun.transform.localRotation = Quaternion.identity; // Reset local rotation
-
-            // Hide arms when holding a gun
-            if (hideArmsScript != null)
-            {
-                hideArmsScript.ApplyHideMaterial();
-                isHoldingGun = true;
-            }
+        if (hideArmsScript != null)
+        {
+            hideArmsScript.ApplyHideMaterial();
+            isHoldingGun = true;
         }
     }
+}
 
-    void UnequipGun()
+void UnequipGun()
+{
+    if (currentGun != null)
     {
-        if (currentGun != null)
-        {
-            // Disable the current gun instead of destroying it
-            currentGun.SetActive(false);
-            currentGun = null;
+        // Disable the current gun instead of destroying it
+        currentGun.SetActive(false);
+        currentGun = null;
 
-            // Show arms when no gun is held
-            if (hideArmsScript != null)
-            {
-                hideArmsScript.RestoreOriginalMaterials();
-                isHoldingGun = false;
-            }
+        // Hide crosshair and show arms when no gun is held
+        if (crosshair != null)
+        {
+            crosshair.SetActive(false);
+        }
+
+        if (hideArmsScript != null)
+        {
+            hideArmsScript.RestoreOriginalMaterials();
+            isHoldingGun = false;
         }
     }
+}
+
 }
