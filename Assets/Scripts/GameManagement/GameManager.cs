@@ -104,7 +104,7 @@ void Start()
             playerDetected = false;
         }
     }
-    public void ResetLevel()
+public void ResetLevel()
 {
     // Reset any necessary game state
     isHoldingGun = false;
@@ -114,18 +114,19 @@ void Start()
     // Unequip the current gun
     UnequipGun();
 
-    // Destroy existing guns
+    // Deactivate existing guns instead of destroying them
     if (inventory != null)
     {
         foreach (var gun in inventory.Values)
         {
             if (gun != null)
-                Destroy(gun);
+            {
+                gun.SetActive(false);
+            }
         }
-        inventory.Clear();
     }
 
-    // Reset the inventory
+    // Reset the inventory (Reactivate guns)
     InitializeInventory();
 
     // Ensure arms are visible
@@ -146,6 +147,29 @@ void Start()
     // Reload the current scene
     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 }
+
+void InitializeInventory()
+{
+    if (inventory == null)
+    {
+        inventory = new Dictionary<int, GameObject>
+        {
+            { 1, sizeGun },
+            { 2, gravityGun }
+        };
+    }
+
+    // Set the initial parent and position/rotation for each gun
+    foreach (var gun in inventory.Values)
+    {
+        if (gun != null)
+        {
+            gun.transform.SetParent(gunParent, false); // Set parent without changing local transform
+            gun.SetActive(false);
+        }
+    }
+}
+
 
 
     public bool IsObjectMadeBig()

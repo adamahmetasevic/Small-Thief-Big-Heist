@@ -152,10 +152,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHoldingGun: 0
-  sizeGunPrefab: {fileID: 1413745144189058025, guid: 881ffc6fdb99f0848a1306b2b62e8704, type: 3}
-  gravityGunPrefab: {fileID: 1542792768376697140, guid: 5fbac080b422ff54ab6425b28ddc9d72, type: 3}
+  sizeGun: {fileID: 0}
+  gravityGun: {fileID: 0}
   gunParent: {fileID: 2015029241781367801, guid: c49ee853953d9a34fabb462cd52c1e5b, type: 3}
-  crosshair: {fileID: 4330948556565606828, guid: b03b15d56bb79464ebccf994c352b968, type: 3}
+  crosshair: {fileID: 1637767748}
 --- !u!4 &272844715
 Transform:
   m_ObjectHideFlags: 0
@@ -458,6 +458,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8933568010195736429, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.387
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -614,6 +618,11 @@ MonoBehaviour:
   dustParticlePrefab: {fileID: 1599718021928974, guid: 21461e6c060baf044ac3e717ed4170cb, type: 3}
   impactSound: {fileID: 8300000, guid: 89a8082114499c64f8627b9a79d65fc1, type: 3}
   impactSpeedThreshold: 5
+--- !u!1 &1637767748 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5689545990704871451, guid: b03b15d56bb79464ebccf994c352b968, type: 3}
+  m_PrefabInstance: {fileID: 7025439927301244479}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1637767749 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5855958397054953654, guid: b03b15d56bb79464ebccf994c352b968, type: 3}
