@@ -12,9 +12,10 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject sizeGun;
     [SerializeField] private GameObject gravityGun;
-    [SerializeField] private Transform gunParent; // Assign this to your camera or hand transform in the inspector
+    [SerializeField] private Transform gunParent; 
 
     [SerializeField] private GameObject crosshair;
+    [SerializeField] private string failureSceneName; // Name of the failure scene
 
     private GameObject currentGun;
     private Dictionary<int, GameObject> inventory;
@@ -40,7 +41,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Hide crosshair at the start
         if (crosshair != null)
         {
             crosshair.SetActive(false);
@@ -55,12 +55,11 @@ public class GameManager : MonoBehaviour
             { 2, gravityGun }
         };
 
-        // Set the initial parent and position/rotation for each gun
         foreach (var gun in inventory.Values)
         {
             if (gun != null)
             {
-                gun.transform.SetParent(gunParent, false); // Set parent without changing local transform
+                gun.transform.SetParent(gunParent, false); 
                 gun.SetActive(false);
             }
         }
@@ -86,19 +85,19 @@ public class GameManager : MonoBehaviour
     {
         if (inventory.TryGetValue(gunIndex, out GameObject gun))
         {
-            UnequipGun(); // Unequip any currently held gun
+            UnequipGun(); 
 
             currentGun = gun;
             currentGun.SetActive(true);
 
             if (crosshair != null)
             {
-                crosshair.SetActive(true); // Show crosshair when holding a gun
+                crosshair.SetActive(true); 
             }
 
             if (hideArmsScript != null)
             {
-                hideArmsScript.ApplyHideMaterial(); // Hide arms when holding a gun
+                hideArmsScript.ApplyHideMaterial(); 
                 isHoldingGun = true;
             }
         }
@@ -156,50 +155,9 @@ public class GameManager : MonoBehaviour
         return objectMadeBig;
     }
 
-    public void ResetLevel()
+    public void GoToFailureScene()
     {
-        // Reset any necessary game state
-        isHoldingGun = false;
-        playerDetected = false;
-        objectMadeBig = false;
-
-        // Unequip the current gun
-        UnequipGun();
-
-        // Deactivate existing guns instead of destroying them
-        if (inventory != null)
-        {
-            foreach (var gun in inventory.Values)
-            {
-                if (gun != null)
-                {
-                    gun.SetActive(false);
-                }
-            }
-        }
-
-        // Ensure arms are visible
-        if (hideArmsScript != null)
-        {
-            hideArmsScript.RestoreOriginalMaterials();
-        }
-
-        // Hide crosshair
-        if (crosshair != null)
-        {
-            crosshair.SetActive(false);
-        }
-
-        // Ensure gunParent is hidden
-        if (gunParent != null)
-        {
-            gunParent.gameObject.SetActive(false);
-        }
-
-        // Reset the current gun reference
-        currentGun = null;
-
-        // Reload the current scene
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+        // Load the failure scene
+        SceneManager.LoadScene(failureSceneName);
+    } 
 }
