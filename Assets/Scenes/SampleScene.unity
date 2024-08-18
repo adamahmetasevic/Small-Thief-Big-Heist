@@ -152,10 +152,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHoldingGun: 0
-  sizeGun: {fileID: 0}
-  gravityGun: {fileID: 0}
+  sizeGun: {fileID: 721435372}
+  gravityGun: {fileID: 1988516731}
   gunParent: {fileID: 2015029241781367801, guid: c49ee853953d9a34fabb462cd52c1e5b, type: 3}
   crosshair: {fileID: 1637767748}
+  failureSceneName: Failure
 --- !u!4 &272844715
 Transform:
   m_ObjectHideFlags: 0
@@ -296,6 +297,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &721435372 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2934485329069395655, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+  m_PrefabInstance: {fileID: 1400850542}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &867539238
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -886,6 +892,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4327670655549164, guid: 9390e70d13c7e454f8022d50d0112dc7, type: 3}
   m_PrefabInstance: {fileID: 1970400273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1988516731 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3829118700067377070, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+  m_PrefabInstance: {fileID: 1400850542}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7025439927301244479
 PrefabInstance:
