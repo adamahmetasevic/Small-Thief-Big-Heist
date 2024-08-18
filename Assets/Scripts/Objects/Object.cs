@@ -13,7 +13,7 @@ public class InteractableObject : MonoBehaviour
     public float impactSpeedThreshold = 5f;  // Speed threshold for impact
     private AudioSource audioSource;          // Audio source for playing sounds
 
-    void Start()
+    protected virtual void Start()
 {
     // Initialize the original size of the object
     originalSize = transform.localScale;
@@ -24,9 +24,13 @@ public class InteractableObject : MonoBehaviour
     audioSource.minDistance = 5.0f;  // Full volume within this distance
     audioSource.maxDistance = 100.0f; // No sound beyond this distance
 }
+    protected Vector3 GetOriginalSize()
+    {
+        return originalSize;
+    }
 
+    public virtual void ChangeSize(float multiplier)
 
-    public void ChangeSize(float multiplier)
     {
         // Calculate the new size based on the multiplier
         Vector3 newSize = transform.localScale * multiplier;

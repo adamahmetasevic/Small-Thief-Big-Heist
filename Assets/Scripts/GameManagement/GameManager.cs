@@ -1,12 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
     public bool isHoldingGun = false;
     private bool playerDetected = false;
+    private bool objectMadeBig = false;
 
     [SerializeField] private GameObject sizeGun;
     [SerializeField] private GameObject gravityGun;
@@ -77,8 +78,9 @@ void Start()
             UnequipGun();
         }
     }
-    public void AlertAllEnemies()
+     public void AlertAllEnemies()
     {
+        objectMadeBig = true;
         if (!playerDetected)
         {
             EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
@@ -92,7 +94,7 @@ void Start()
 
     public void PlayerLost()
     {
-        if (playerDetected)
+        if (playerDetected && !objectMadeBig)
         {
             EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
             foreach (EnemyAI enemy in enemies)
@@ -102,6 +104,55 @@ void Start()
             playerDetected = false;
         }
     }
+    public void ResetLevel()
+{
+    // Reset any necessary game state
+    isHoldingGun = false;
+    playerDetected = false;
+    objectMadeBig = false;
+
+    // Unequip the current gun
+    UnequipGun();
+
+    // Destroy existing guns
+    if (inventory != null)
+    {
+        foreach (var gun in inventory.Values)
+        {
+            if (gun != null)
+                Destroy(gun);
+        }
+        inventory.Clear();
+    }
+
+    // Reset the inventory
+    InitializeInventory();
+
+    // Ensure arms are visible
+    if (hideArmsScript != null)
+    {
+        hideArmsScript.RestoreOriginalMaterials();
+    }
+
+    // Hide crosshair
+    if (crosshair != null)
+    {
+        crosshair.SetActive(false);
+    }
+
+    // Reset the current gun reference
+    currentGun = null;
+
+    // Reload the current scene
+    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+}
+
+
+    public bool IsObjectMadeBig()
+    {
+        return objectMadeBig;
+    }
+
 void EquipGun(int gunIndex)
 {
     if (inventory.TryGetValue(gunIndex, out GameObject gun))
