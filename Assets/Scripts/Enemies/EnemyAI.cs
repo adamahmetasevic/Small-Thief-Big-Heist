@@ -50,13 +50,15 @@ public class EnemyAI : MonoBehaviour
             DetectPlayer();
         }
     }
-private void OnCollisionEnter(Collision collision)
+
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            ResetLevel();
+            TriggerFailureScene();
         }
     }
+
     IEnumerator Patrol()
     {
         while (true)
@@ -89,11 +91,13 @@ private void OnCollisionEnter(Collision collision)
             yield return null;
         }
     }
-    private void ResetLevel()
-        {
-            // Call the method to reset the level in your GameManager
-            GameManager.instance.ResetLevel();
-        }
+
+    private void TriggerFailureScene()
+    {
+        // Call the method to transition to the failure scene in your GameManager
+        GameManager.instance.GoToFailureScene();
+    }
+
     void DetectPlayer()
     {
         Vector3 directionToPlayer = player.position - transform.position;
@@ -140,7 +144,7 @@ private void OnCollisionEnter(Collision collision)
         }
     }
 
-     public void PlayerDetected()
+    public void PlayerDetected()
     {
         isChasing = true;
         chaseTimer = 0f;
@@ -157,6 +161,7 @@ private void OnCollisionEnter(Collision collision)
             StartCoroutine(Patrol());
         }
     }
+
     void ChasePlayer()
     {
         transform.position = Vector3.MoveTowards(transform.position, player.position, chaseSpeed * Time.deltaTime);
