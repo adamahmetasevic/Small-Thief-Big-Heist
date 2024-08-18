@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
@@ -36,14 +37,16 @@ public class GameManager : MonoBehaviour
         InitializeInventory();
         hideArmsScript = FindObjectOfType<HideArms>();
     }
-void Start()
-{
-    // Hide crosshair at the start
-    if (crosshair != null)
+
+    void Start()
     {
-        crosshair.SetActive(false);
+        // Hide crosshair at the start
+        if (crosshair != null)
+        {
+            crosshair.SetActive(false);
+        }
     }
-}
+
     void InitializeInventory()
     {
         inventory = new Dictionary<int, GameObject>
@@ -78,7 +81,50 @@ void Start()
             UnequipGun();
         }
     }
-     public void AlertAllEnemies()
+
+    public void EquipGun(int gunIndex)
+    {
+        if (inventory.TryGetValue(gunIndex, out GameObject gun))
+        {
+            UnequipGun(); // Unequip any currently held gun
+
+            currentGun = gun;
+            currentGun.SetActive(true);
+
+            if (crosshair != null)
+            {
+                crosshair.SetActive(true); // Show crosshair when holding a gun
+            }
+
+            if (hideArmsScript != null)
+            {
+                hideArmsScript.ApplyHideMaterial(); // Hide arms when holding a gun
+                isHoldingGun = true;
+            }
+        }
+    }
+
+    public void UnequipGun()
+    {
+        if (currentGun != null)
+        {
+            currentGun.SetActive(false);
+            currentGun = null;
+
+            if (crosshair != null)
+            {
+                crosshair.SetActive(false);
+            }
+
+            if (hideArmsScript != null)
+            {
+                hideArmsScript.RestoreOriginalMaterials();
+                isHoldingGun = false;
+            }
+        }
+    }
+
+    public void AlertAllEnemies()
     {
         objectMadeBig = true;
         if (!playerDetected)
@@ -104,125 +150,56 @@ void Start()
             playerDetected = false;
         }
     }
-public void ResetLevel()
-{
-    // Reset any necessary game state
-    isHoldingGun = false;
-    playerDetected = false;
-    objectMadeBig = false;
-
-    // Unequip the current gun
-    UnequipGun();
-
-    // Deactivate existing guns instead of destroying them
-    if (inventory != null)
-    {
-        foreach (var gun in inventory.Values)
-        {
-            if (gun != null)
-            {
-                gun.SetActive(false);
-            }
-        }
-    }
-
-    // Reset the inventory (Reactivate guns)
-    InitializeInventory();
-
-    // Ensure arms are visible
-    if (hideArmsScript != null)
-    {
-        hideArmsScript.RestoreOriginalMaterials();
-    }
-
-    // Hide crosshair
-    if (crosshair != null)
-    {
-        crosshair.SetActive(false);
-    }
-
-    // Reset the current gun reference
-    currentGun = null;
-
-    // Reload the current scene
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-}
-
-void InitializeInventory()
-{
-    if (inventory == null)
-    {
-        inventory = new Dictionary<int, GameObject>
-        {
-            { 1, sizeGun },
-            { 2, gravityGun }
-        };
-    }
-
-    // Set the initial parent and position/rotation for each gun
-    foreach (var gun in inventory.Values)
-    {
-        if (gun != null)
-        {
-            gun.transform.SetParent(gunParent, false); // Set parent without changing local transform
-            gun.SetActive(false);
-        }
-    }
-}
-
-
 
     public bool IsObjectMadeBig()
     {
         return objectMadeBig;
     }
 
-void EquipGun(int gunIndex)
-{
-    if (inventory.TryGetValue(gunIndex, out GameObject gun))
+    public void ResetLevel()
     {
-        UnequipGun(); // Unequip current gun if any
+        // Reset any necessary game state
+        isHoldingGun = false;
+        playerDetected = false;
+        objectMadeBig = false;
 
-        // Set the gun as a child of the gunParent and enable it
-        currentGun = gun;
-        currentGun.SetActive(true);
-        currentGun.transform.localPosition = Vector3.zero; // Reset local position
-        currentGun.transform.localRotation = Quaternion.identity; // Reset local rotation
+        // Unequip the current gun
+        UnequipGun();
 
-        // Show crosshair and hide arms when holding a gun
-        if (crosshair != null)
+        // Deactivate existing guns instead of destroying them
+        if (inventory != null)
         {
-            crosshair.SetActive(true);
+            foreach (var gun in inventory.Values)
+            {
+                if (gun != null)
+                {
+                    gun.SetActive(false);
+                }
+            }
         }
 
+        // Ensure arms are visible
         if (hideArmsScript != null)
         {
-            hideArmsScript.ApplyHideMaterial();
-            isHoldingGun = true;
+            hideArmsScript.RestoreOriginalMaterials();
         }
-    }
-}
 
-void UnequipGun()
-{
-    if (currentGun != null)
-    {
-        // Disable the current gun instead of destroying it
-        currentGun.SetActive(false);
-        currentGun = null;
-
-        // Hide crosshair and show arms when no gun is held
+        // Hide crosshair
         if (crosshair != null)
         {
             crosshair.SetActive(false);
         }
 
-        if (hideArmsScript != null)
+        // Ensure gunParent is hidden
+        if (gunParent != null)
         {
-            hideArmsScript.RestoreOriginalMaterials();
-            isHoldingGun = false;
+            gunParent.gameObject.SetActive(false);
         }
-    }
-}
 
+        // Reset the current gun reference
+        currentGun = null;
+
+        // Reload the current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
