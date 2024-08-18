@@ -40,14 +40,23 @@ public class EnemyAI : MonoBehaviour
         if (isChasing)
         {
             ChasePlayer();
-            CheckIfLostPlayer();
+            if (!GameManager.instance.IsObjectMadeBig())
+            {
+                CheckIfLostPlayer();
+            }
         }
         else
         {
             DetectPlayer();
         }
     }
-
+private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            ResetLevel();
+        }
+    }
     IEnumerator Patrol()
     {
         while (true)
@@ -80,7 +89,11 @@ public class EnemyAI : MonoBehaviour
             yield return null;
         }
     }
-
+    private void ResetLevel()
+        {
+            // Call the method to reset the level in your GameManager
+            GameManager.instance.ResetLevel();
+        }
     void DetectPlayer()
     {
         Vector3 directionToPlayer = player.position - transform.position;
@@ -116,7 +129,7 @@ public class EnemyAI : MonoBehaviour
         if (Vector3.Distance(transform.position, player.position) > detectionRange)
         {
             chaseTimer += Time.deltaTime;
-            if (chaseTimer >= lostPlayerTime)
+            if (chaseTimer >= lostPlayerTime && !GameManager.instance.IsObjectMadeBig())
             {
                 LostPlayer();
             }
@@ -127,21 +140,23 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public void PlayerDetected()
+     public void PlayerDetected()
     {
         isChasing = true;
-        chaseTimer = 0f; // Reset the timer when the player is detected
-        // Additional logic when the player is detected
+        chaseTimer = 0f;
+        StopCoroutine(Patrol());
     }
 
     public void LostPlayer()
     {
-        isChasing = false;
-        chaseTimer = 0f; // Reset the timer
-        // Additional logic when the player is lost
-        StartCoroutine(Patrol());
+        if (!GameManager.instance.IsObjectMadeBig())
+        {
+            isChasing = false;
+            chaseTimer = 0f; // Reset the timer
+            // Additional logic when the player is lost
+            StartCoroutine(Patrol());
+        }
     }
-
     void ChasePlayer()
     {
         transform.position = Vector3.MoveTowards(transform.position, player.position, chaseSpeed * Time.deltaTime);
