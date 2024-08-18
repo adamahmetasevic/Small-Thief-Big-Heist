@@ -97,7 +97,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 547d98b7a3cb0b843ab2430318e0b1e4, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -19366,10 +19366,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHoldingGun: 0
-  sizeGun: {fileID: 0}
-  gravityGun: {fileID: 0}
-  gunParent: {fileID: 0}
+  sizeGun: {fileID: 1533176044}
+  gravityGun: {fileID: 1533176043}
+  gunParent: {fileID: 1533176042}
   crosshair: {fileID: 0}
+  failureSceneName: Failure
 --- !u!4 &1505793841
 Transform:
   m_ObjectHideFlags: 0
@@ -19643,6 +19644,21 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+--- !u!4 &1533176042 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8933568010195736429, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+  m_PrefabInstance: {fileID: 1533176041}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1533176043 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3829118700067377070, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+  m_PrefabInstance: {fileID: 1533176041}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1533176044 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2934485329069395655, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+  m_PrefabInstance: {fileID: 1533176041}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1536361568
 PrefabInstance:
   m_ObjectHideFlags: 0
