@@ -19,7 +19,7 @@ public class FirstPersonController : MonoBehaviour
     private float originalControllerHeight;
     private bool isShrinking = false;
 
-    public Camera camera;
+    public Camera camera; // needed so the ray can be drawn from the camera
     private Animator animator; // Reference to the Animator component
 
 
