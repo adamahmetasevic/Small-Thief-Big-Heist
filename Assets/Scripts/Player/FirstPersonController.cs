@@ -19,7 +19,9 @@ public class FirstPersonController : MonoBehaviour
     private float originalControllerHeight;
     private bool isShrinking = false;
 
+    public Camera camera;
     private Animator animator; // Reference to the Animator component
+
 
     void Start()
     {
