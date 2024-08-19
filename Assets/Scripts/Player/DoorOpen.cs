@@ -16,6 +16,5 @@ public class DoorOpen : MonoBehaviour
     protected virtual void OpenDoor()
     {
         //wont do anything because its inheritance 
-        //maybe a little overkill for what we need to set it up like this but I like it this way
     }
 }
