@@ -9,7 +9,8 @@ public class EnemyAI : MonoBehaviour
     public float detectionRange = 10f;
     public float fieldOfViewAngle = 110f;
     public LayerMask obstacleMask;
-    public float lostPlayerTime = 5f; // Time to wait before switching to patrol
+    public LayerMask restrictedAreaMask;
+    public float lostPlayerTime = 5f; 
 
     private int currentPatrolIndex;
     private Transform player;
@@ -29,13 +30,11 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        // Calculate the speed of the AI
         float distanceMoved = Vector3.Distance(lastPosition, transform.position);
-        float speed = distanceMoved / Time.deltaTime;
+        float currentSpeed = distanceMoved / Time.deltaTime;
         lastPosition = transform.position;
 
-        // Update the animator with the current speed
-        animator.SetFloat("Speed", speed);
+        animator.SetFloat("Speed", currentSpeed);
 
         if (isChasing)
         {
@@ -47,13 +46,21 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            DetectPlayer();
+            if (IsPlayerOnRestrictedArea())
+            {
+                DetectPlayer();
+            }
         }
+    }
+
+    bool IsPlayerOnRestrictedArea()
+    {
+        return Physics.CheckSphere(player.position, 0.5f, restrictedAreaMask);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && isChasing)
         {
             TriggerFailureScene();
         }
@@ -70,21 +77,17 @@ public class EnemyAI : MonoBehaviour
                 
                 if (distanceToTarget > 0.5f)
                 {
-                    // Move towards the patrol point
                     transform.position = Vector3.MoveTowards(transform.position, targetPoint.position, speed * Time.deltaTime);
 
-                    // Rotate to face the patrol point but keep the AI upright
                     Vector3 directionToTarget = targetPoint.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-                    targetRotation.x = 0; // Keep the AI upright
-                    targetRotation.z = 0; // Keep the AI upright
+                    targetRotation.x = 0;
+                    targetRotation.z = 0;
 
-                    // Smoothly rotate the AI towards the patrol point
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); // Adjust speed as needed
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
                 }
                 else
                 {
-                    // Update to the next patrol point
                     currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
                 }
             }
@@ -94,7 +97,6 @@ public class EnemyAI : MonoBehaviour
 
     private void TriggerFailureScene()
     {
-        // Call the method to transition to the failure scene in your GameManager
         GameManager.instance.GoToFailureScene();
     }
 
@@ -104,10 +106,7 @@ public class EnemyAI : MonoBehaviour
         float distanceToPlayer = directionToPlayer.magnitude;
         float angle = Vector3.Angle(directionToPlayer, transform.forward);
 
-        // Calculate the height offset (e.g., half of the enemy's height)
-        float heightOffset = 1f; // Adjust this value to match the desired height
-
-        // Set the start point of the raycast at the height of the enemy
+        float heightOffset = 1f;
         Vector3 raycastStart = transform.position + Vector3.up * heightOffset;
 
         if (angle < fieldOfViewAngle * 0.5f && distanceToPlayer < detectionRange)
@@ -140,7 +139,7 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            chaseTimer = 0f; // Reset the timer if the player is still in range
+            chaseTimer = 0f;
         }
     }
 
@@ -156,8 +155,7 @@ public class EnemyAI : MonoBehaviour
         if (!GameManager.instance.IsObjectMadeBig())
         {
             isChasing = false;
-            chaseTimer = 0f; // Reset the timer
-            // Additional logic when the player is lost
+            chaseTimer = 0f;
             StartCoroutine(Patrol());
         }
     }
@@ -165,7 +163,6 @@ public class EnemyAI : MonoBehaviour
     void ChasePlayer()
     {
         transform.position = Vector3.MoveTowards(transform.position, player.position, chaseSpeed * Time.deltaTime);
-        transform.LookAt(player); // Ensure the enemy is facing the player
-        // Additional chasing logic can be added here
+        transform.LookAt(player);
     }
 }

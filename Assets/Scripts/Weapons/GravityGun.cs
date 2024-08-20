@@ -44,21 +44,30 @@ public class GravityGun : MonoBehaviour
         }
     }
 
-    void TryPickUpObject()
+void TryPickUpObject()
+{
+    RaycastHit hit;
+    if (Physics.Raycast(gunEnd.position, gunEnd.forward, out hit, maxDistance))
     {
-        RaycastHit hit;
-        if (Physics.Raycast(gunEnd.position, gunEnd.forward, out hit, maxDistance))
+        if (hit.rigidbody != null && hit.collider.CompareTag("Interactable"))
         {
-            if (hit.rigidbody != null && hit.collider.CompareTag("Interactable"))
+            // Always pick up regular "Interactable" objects
+            heldObject = hit.rigidbody.gameObject;
+            Rigidbody rb = hit.rigidbody;
+            rb.useGravity = false;
+            rb.drag = 10;
+            rb.angularDrag = 10;
+
+            // Additionally, check for GoalObject for the IsLarge condition
+            GoalObject goalObject = hit.collider.GetComponent<GoalObject>();
+            if (goalObject != null && !goalObject.IsLarge())
             {
-                heldObject = hit.rigidbody.gameObject;
-                Rigidbody rb = hit.rigidbody;
-                rb.useGravity = false;
-                rb.drag = 10; // Increase drag to reduce movement while held
-                rb.angularDrag = 10; // Optional: Increase angular drag to reduce rotation while held
+                // If it IS a GoalObject but NOT large, release it immediately
+                ReleaseObject();
             }
         }
     }
+}
 
     void ReleaseObject()
     {

@@ -13,7 +13,7 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 velocity;
     private bool isGrounded;
 
-    public float shrinkFactor = 10f; 
+    public float shrinkFactor = 10f;
     private Vector3 originalScale;
     private Vector3 originalControllerCenter;
     private float originalControllerHeight;
@@ -21,7 +21,6 @@ public class FirstPersonController : MonoBehaviour
 
     public Camera camera; // needed so the ray can be drawn from the camera
     private Animator animator; // Reference to the Animator component
-
 
     void Start()
     {
@@ -35,7 +34,8 @@ public class FirstPersonController : MonoBehaviour
     void Update()
     {
         // Check if grounded
-        isGrounded = Physics.CheckSphere(transform.position, groundDistance, groundMask);
+        isGrounded = Physics.CheckSphere(transform.position, groundDistance, groundMask) ||
+                     Physics.CheckSphere(transform.position, groundDistance, 1 << LayerMask.NameToLayer("restrictedarea"));
 
         if (isGrounded && velocity.y < 0)
         {
@@ -91,21 +91,21 @@ public class FirstPersonController : MonoBehaviour
     }
 
     void CheckIfHiding()
-{
-    RaycastHit hit;
-    Vector3 rayOrigin = transform.position + Vector3.up * controller.height / 2;
-    if (Physics.Raycast(rayOrigin, transform.forward, out hit, 2f))
     {
-        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+        RaycastHit hit;
+        Vector3 rayOrigin = transform.position + Vector3.up * controller.height / 2;
+        if (Physics.Raycast(rayOrigin, transform.forward, out hit, 2f))
         {
-            // Notify GameManager that player is hiding
-            GameManager.instance.PlayerLost();
-        }
-        else
-        {
-            // Notify GameManager that player is detected
-            GameManager.instance.AlertAllEnemies();
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))
+            {
+                // Notify GameManager that player is hiding
+                GameManager.instance.PlayerLost();
+            }
+            else
+            {
+                // Notify GameManager that player is detected
+                GameManager.instance.AlertAllEnemies();
+            }
         }
     }
-}
 }
