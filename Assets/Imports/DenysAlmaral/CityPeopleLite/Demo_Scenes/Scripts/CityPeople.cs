@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace CityPeople
 {
@@ -11,20 +10,18 @@ namespace CityPeople
         public float moveSpeed = 3f;
         public float minWaitTime = 2f;
         public float maxWaitTime = 5f;
+        public float reachDistance = 0.5f; 
+        public float rotationSpeed = 5f; // Add a rotation speed variable
 
-        private NavMeshAgent agent;
         private int currentPointIndex = 0;
+        private bool isMoving = true; 
 
         private AnimationClip[] myClips;
         private Animator animator;
 
-        // Cache the Animator parameter ID for better performance
-        private int speedParameterID;
-
         void Start()
         {
             animator = GetComponent<Animator>();
-            speedParameterID = Animator.StringToHash("Speed"); // Cache the ID
 
             if (animator != null)
             {
@@ -32,24 +29,21 @@ namespace CityPeople
                 PlayAnyClip();
             }
 
-            agent = GetComponent<NavMeshAgent>();
-            if (agent != null && patrolPoints.Length > 0)
+            if (patrolPoints.Length == 0)
             {
-                agent.speed = moveSpeed;
-                StartCoroutine(Patrol());
+                enabled = false; 
             }
             else
             {
-                Debug.LogError("NavMeshAgent component missing or no patrol points set!");
+                StartCoroutine(FollowPatrolPoints());
             }
         }
 
         void Update()
         {
-            // Update animator based on agent's velocity
-            if (animator != null && agent != null)
+            if (animator != null)
             {
-                animator.SetFloat(speedParameterID, agent.velocity.magnitude);
+                animator.SetFloat("Speed", isMoving ? moveSpeed : 0f); 
             }
         }
 
@@ -62,28 +56,41 @@ namespace CityPeople
             }
         }
 
-        IEnumerator Patrol()
+        IEnumerator FollowPatrolPoints()
         {
             while (true)
             {
-                // Set destination for the NavMesh Agent
-                agent.SetDestination(patrolPoints[currentPointIndex].position);
-
-                // Wait until the agent reaches the destination or gets stuck
-                while (!agent.pathPending && agent.remainingDistance > agent.stoppingDistance)
+                if (isMoving)
                 {
-                    yield return null;
+                    Vector3 targetPosition = patrolPoints[currentPointIndex].position;
+
+                    // Calculate direction and rotate smoothly (using Vector3.up)
+                    Vector3 direction = (targetPosition - transform.position).normalized;
+                    Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up); 
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+                    transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+
+
+                    if (Vector3.Distance(transform.position, targetPosition) < reachDistance)
+                    {
+                        isMoving = false;
+                        StartCoroutine(WaitAtPoint());
+                    }
                 }
 
-                // Wait at the patrol point
-                yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
-
-                // Choose the next patrol point
-                currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;
-
-                // Play a random animation after reaching a point
-                PlayAnyClip();
+                yield return null; 
             }
+        }
+
+        IEnumerator WaitAtPoint()
+        {
+            PlayAnyClip(); 
+
+            yield return new WaitForSeconds(Random.Range(minWaitTime, maxWaitTime));
+
+            currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length; 
+            isMoving = true;
         }
     }
 }
