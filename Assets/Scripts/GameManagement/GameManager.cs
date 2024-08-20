@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
+        public static float finalElapsedTime;
 
     public bool isHoldingGun = false;
     private bool playerDetected = false;
@@ -12,15 +13,19 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject sizeGun;
     [SerializeField] private GameObject gravityGun;
-    [SerializeField] private Transform gunParent; 
+    [SerializeField] private Transform gunParent;
 
     [SerializeField] private GameObject crosshair;
     [SerializeField] private string failureSceneName; // Name of the failure scene
+    [SerializeField] private string victorySceneName; // Name of the victory scene
 
     private GameObject currentGun;
     private Dictionary<int, GameObject> inventory;
 
     private HideArms hideArmsScript;
+
+    private float startTime;
+    private bool timerRunning = false;
 
     void Awake()
     {
@@ -45,6 +50,8 @@ public class GameManager : MonoBehaviour
         {
             crosshair.SetActive(false);
         }
+
+        ResetTimer();
     }
 
     void InitializeInventory()
@@ -59,7 +66,7 @@ public class GameManager : MonoBehaviour
         {
             if (gun != null)
             {
-                gun.transform.SetParent(gunParent, false); 
+                gun.transform.SetParent(gunParent, false);
                 gun.SetActive(false);
             }
         }
@@ -67,6 +74,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (timerRunning)
+        {
+            // Update the timer here
+        }
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             EquipGun(1);
@@ -160,4 +172,29 @@ public class GameManager : MonoBehaviour
         // Load the failure scene
         SceneManager.LoadScene(failureSceneName);
     } 
+
+    public void ResetTimer()
+    {
+        startTime = Time.time;
+        timerRunning = true;
+    }
+
+    public float GetElapsedTime()
+    {
+        if (timerRunning)
+            return Time.time - startTime;
+        else
+            return 0f;
+    }
+
+    public void StopTimer()
+    {
+        timerRunning = false;
+    }
+
+public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }
+

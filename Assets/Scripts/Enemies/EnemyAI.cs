@@ -11,7 +11,7 @@ public class EnemyAI : MonoBehaviour
     public LayerMask obstacleMask;
     public LayerMask restrictedAreaMask;
     public float lostPlayerTime = 5f; 
-
+[SerializeField] private float slowMotionTimeScale = 0.2f; // Time scale during slow motion
     private int currentPatrolIndex;
     private Transform player;
     private bool isChasing = false;
@@ -95,10 +95,28 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private void TriggerFailureScene()
-    {
-        GameManager.instance.GoToFailureScene();
-    }
+    private IEnumerator SlowMotionAndFailureSequence()
+{
+    // Play the victory sound effect (if you have one)
+    // audioSource.PlayOneShot(failureSound);
+
+    // Slow down time
+    Time.timeScale = slowMotionTimeScale;
+
+    // Wait for a specified delay (adjust as needed)
+    yield return new WaitForSeconds(2f * slowMotionTimeScale); // Adjust wait time for slow motion
+
+    // Reset time scale to normal
+    Time.timeScale = 1f;
+
+    // Load the failure scene
+    GameManager.instance.GoToFailureScene();
+}
+
+private void TriggerFailureScene()
+{
+    StartCoroutine(SlowMotionAndFailureSequence());
+}
 
     void DetectPlayer()
     {
