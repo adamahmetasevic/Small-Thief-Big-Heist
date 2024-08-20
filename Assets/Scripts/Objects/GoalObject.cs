@@ -38,4 +38,9 @@ public class GoalObject : InteractableObject
     {
         GameManager.instance.AlertAllEnemies();
     }
+
+    public bool IsLarge() 
+{
+    return isLarge; // Return true if the object is large
+}
 }
