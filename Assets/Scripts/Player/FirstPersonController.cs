@@ -28,7 +28,6 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private GameObject gravityGun;
     [SerializeField] private Transform gunParent;
     [SerializeField] private GameObject crosshair;
-    [SerializeField] private SkinnedMeshRenderer[] handMeshes; 
     private HideArms hideArmsScript;
     private bool isHoldingGun = false; // Declare the variable here
 
