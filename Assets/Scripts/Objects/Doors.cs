@@ -6,30 +6,40 @@ public class Doors : DoorOpen
 {
     [SerializeField] private GameObject door;
     [SerializeField] private float proximityRange = 2f; // Adjust the trigger distance
+    [SerializeField] private float closeDelay = 2f;    // Delay before closing the door
 
     private bool doorOpen = false;
+    private bool isNpcNear = false; // Flag to track if an NPC is near
 
     void Update()
     {
-        // Check for nearby NPCs only if the door is currently closed
         if (!doorOpen)
         {
             CheckForNearbyNPCs();
+        }
+        else
+        {
+            // If the door is open, check if we need to close it
+            if (!isNpcNear && doorOpen)
+            {
+                StartCoroutine(CloseDoorAfterDelay());
+            }
         }
     }
 
     private void CheckForNearbyNPCs()
     {
-        // Use OverlapSphere to find all colliders within the proximity range
         Collider[] colliders = Physics.OverlapSphere(transform.position, proximityRange);
 
-        // Check if any of the colliders belong to an NPC
+        isNpcNear = false; // Reset the flag before checking
+
         foreach (Collider collider in colliders)
         {
-            if (collider.CompareTag("NPC")) // Assuming your NPCs have the tag "NPC"
+            if (collider.CompareTag("NPC"))
             {
+                isNpcNear = true; // Set the flag if an NPC is found
                 OpenDoor();
-                break; // Open only once even if multiple NPCs are nearby
+                break;
             }
         }
     }
@@ -40,7 +50,15 @@ public class Doors : DoorOpen
         door.GetComponent<Animator>().SetBool("IsOpen", doorOpen);
     }
 
-    // You might also want a CloseDoor() method to handle closing:
+    private IEnumerator CloseDoorAfterDelay()
+    {
+        // Wait for the specified delay
+        yield return new WaitForSeconds(closeDelay);
+
+        // Close the door
+        CloseDoor();
+    }
+
     public void CloseDoor()
     {
         doorOpen = false;
