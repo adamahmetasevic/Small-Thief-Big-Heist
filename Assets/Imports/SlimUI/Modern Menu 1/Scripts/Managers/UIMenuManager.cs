@@ -142,6 +142,8 @@ namespace SlimUI.ModernMenu{
 		}
 
 		public void ReturnMenu(){
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
 			playMenu.SetActive(false);
 			if(extrasMenu) extrasMenu.SetActive(false);
 			exitMenu.SetActive(false);

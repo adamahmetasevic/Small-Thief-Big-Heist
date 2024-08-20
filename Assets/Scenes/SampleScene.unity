@@ -269,11 +269,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052ce4cb28fd752419fed2dc2a37bb11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHoldingGun: 0
-  sizeGun: {fileID: 721435372}
-  gravityGun: {fileID: 1988516731}
-  gunParent: {fileID: 2015029241781367801, guid: c49ee853953d9a34fabb462cd52c1e5b, type: 3}
-  crosshair: {fileID: 1637767748}
   failureSceneName: Failure
   victorySceneName: VictoryScene
 --- !u!4 &272844715
@@ -922,6 +917,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 1400850544}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: sizeGun
+      value: 
+      objectReference: {fileID: 721435372}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: crosshair
+      value: 
+      objectReference: {fileID: 7025439927301244480}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: gunParent
+      value: 
+      objectReference: {fileID: 1400850543}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: gravityGun
+      value: 
+      objectReference: {fileID: 1988516731}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: hideArmsMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: ecdaf7a944fdd7d48a65122861d0ec87, type: 2}
     - target: {fileID: 1433748137544659993, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
       propertyPath: crosshair
       value: 
@@ -983,6 +1002,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+--- !u!4 &1400850543 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8933568010195736429, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+  m_PrefabInstance: {fileID: 1400850542}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &1400850544 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 6937140375997372587, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+  m_PrefabInstance: {fileID: 1400850542}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1567156455
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,11 +1268,6 @@ MonoBehaviour:
   dustParticlePrefab: {fileID: 1599718021928974, guid: 21461e6c060baf044ac3e717ed4170cb, type: 3}
   impactSound: {fileID: 8300000, guid: 89a8082114499c64f8627b9a79d65fc1, type: 3}
   impactSpeedThreshold: 5
---- !u!1 &1637767748 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5689545990704871451, guid: b03b15d56bb79464ebccf994c352b968, type: 3}
-  m_PrefabInstance: {fileID: 7025439927301244479}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1637767749 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5855958397054953654, guid: b03b15d56bb79464ebccf994c352b968, type: 3}
@@ -1610,6 +1634,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b03b15d56bb79464ebccf994c352b968, type: 3}
+--- !u!1 &7025439927301244480 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4330948556565606828, guid: b03b15d56bb79464ebccf994c352b968, type: 3}
+  m_PrefabInstance: {fileID: 7025439927301244479}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9028216745268172018
 PrefabInstance:
   m_ObjectHideFlags: 0

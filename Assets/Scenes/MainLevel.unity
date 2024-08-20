@@ -21040,12 +21040,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052ce4cb28fd752419fed2dc2a37bb11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHoldingGun: 0
-  sizeGun: {fileID: 1533176044}
-  gravityGun: {fileID: 1533176043}
-  gunParent: {fileID: 1533176042}
-  crosshair: {fileID: 165480501}
   failureSceneName: Failure
+  victorySceneName: 
 --- !u!4 &1505793841
 Transform:
   m_ObjectHideFlags: 0
@@ -21420,6 +21416,22 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 170347667}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: sizeGun
+      value: 
+      objectReference: {fileID: 1533176044}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: crosshair
+      value: 
+      objectReference: {fileID: 165480501}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: gunParent
+      value: 
+      objectReference: {fileID: 1533176042}
+    - target: {fileID: 484854319281358452, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
+      propertyPath: gravityGun
+      value: 
+      objectReference: {fileID: 1533176043}
     - target: {fileID: 766682779595690841, guid: c14c4fd0e3d3a1c478ca4e424223f91b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.2641255
