@@ -31,12 +31,12 @@ public class FirstPersonController : MonoBehaviour
         animator = GetComponent<Animator>(); // Get the Animator component
     }
 
+
     void Update()
     {
         // Check if grounded
         isGrounded = Physics.CheckSphere(transform.position, groundDistance, groundMask) ||
                      Physics.CheckSphere(transform.position, groundDistance, 1 << LayerMask.NameToLayer("restrictedarea"));
-
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f; // Small negative value to prevent falling through
