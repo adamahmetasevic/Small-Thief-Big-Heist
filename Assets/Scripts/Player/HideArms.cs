@@ -39,6 +39,7 @@ public class HideArms : MonoBehaviour
 
     public void ApplyHideMaterial()
     {
+
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
             Transform[] bones = renderer.bones;
@@ -62,6 +63,8 @@ public class HideArms : MonoBehaviour
 
     public void RestoreOriginalMaterials()
     {
+
+
         foreach (SkinnedMeshRenderer renderer in renderers)
         {
             if (originalMaterials.ContainsKey(renderer))

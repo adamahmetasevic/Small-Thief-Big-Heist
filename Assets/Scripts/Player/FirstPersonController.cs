@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 public class FirstPersonController : MonoBehaviour
 {
     private Vector3 targetScale;
@@ -22,15 +22,56 @@ public class FirstPersonController : MonoBehaviour
     public Camera camera; // needed so the ray can be drawn from the camera
     private Animator animator; // Reference to the Animator component
 
+
+    [Header("Weapon Settings")]
+    [SerializeField] private GameObject sizeGun;
+    [SerializeField] private GameObject gravityGun;
+    [SerializeField] private Transform gunParent;
+    [SerializeField] private GameObject crosshair;
+    [SerializeField] private SkinnedMeshRenderer[] handMeshes; 
+    private HideArms hideArmsScript;
+    private bool isHoldingGun = false; // Declare the variable here
+
+    private GameObject currentGun;
+    private Dictionary<int, GameObject> inventory;
+
+
+     void Awake()
+     {
+        InitializeInventory();
+    hideArmsScript = FindObjectOfType<HideArms>();
+     }
     void Start()
     {
         originalScale = transform.localScale;
         originalControllerCenter = controller.center;
         originalControllerHeight = controller.height;
 
-        animator = GetComponent<Animator>(); // Get the Animator component
+        animator = GetComponent<Animator>(); 
+
+                if (crosshair != null) 
+        {
+            crosshair.SetActive(false);
+        }
     }
 
+void InitializeInventory()
+    {
+        inventory = new Dictionary<int, GameObject>
+        {
+            { 1, sizeGun },
+            { 2, gravityGun }
+        };
+
+        foreach (var gun in inventory.Values)
+        {
+            if (gun != null)
+            {
+                gun.transform.SetParent(gunParent, false);
+                gun.SetActive(false);
+            }
+        }
+    }
 
     void Update()
     {
@@ -72,7 +113,70 @@ public class FirstPersonController : MonoBehaviour
 
         // Notify GameManager if player is hiding
         CheckIfHiding();
+
+        HandleWeaponInput(); 
+
     }
+void HandleWeaponInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            EquipGun(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            EquipGun(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            UnequipGun();
+        }
+    }
+public void EquipGun(int gunIndex)
+    {
+        if (inventory.TryGetValue(gunIndex, out GameObject gun))
+        {
+            UnequipGun(); 
+
+            currentGun = gun;
+            currentGun.SetActive(true);
+
+            if (crosshair != null)
+            {
+                crosshair.SetActive(true); 
+            }
+            if (hideArmsScript != null)
+            {
+                hideArmsScript.ApplyHideMaterial(); 
+                isHoldingGun = true;
+            }
+        }
+    }
+    public void UnequipGun()
+    {
+        if (currentGun != null)
+        {
+            currentGun.SetActive(false);
+            currentGun = null;
+
+            if (crosshair != null)
+            {
+                crosshair.SetActive(false);
+            }
+
+            if (hideArmsScript != null)
+            {
+                hideArmsScript.RestoreOriginalMaterials();
+                isHoldingGun = false;
+            }
+        }
+    }
+
+
+
+
+
+
 
     void ToggleShrink()
     {
