@@ -55,7 +55,7 @@ public class EnemyAI : MonoBehaviour
 
     bool IsPlayerOnRestrictedArea()
     {
-        return Physics.CheckSphere(player.position, 0.5f, restrictedAreaMask);
+        return false; //Physics.CheckSphere(player.position, 0.2f, restrictedAreaMask);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -66,34 +66,45 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    IEnumerator Patrol()
+   IEnumerator Patrol()
+{
+    while (true)
     {
-        while (true)
+        if (!isChasing)
         {
-            if (!isChasing)
+            // Check if the patrolPoints array has elements
+            if (patrolPoints.Length > 0) 
             {
                 Transform targetPoint = patrolPoints[currentPatrolIndex];
                 float distanceToTarget = Vector3.Distance(transform.position, targetPoint.position);
-                
+
                 if (distanceToTarget > 0.5f)
                 {
                     transform.position = Vector3.MoveTowards(transform.position, targetPoint.position, speed * Time.deltaTime);
 
                     Vector3 directionToTarget = targetPoint.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-                    targetRotation.x = 0;
-                    targetRotation.z = 0;
+                    targetRotation.x = 0; // Keep the enemy upright
+                    targetRotation.z = 0; 
 
                     transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
                 }
                 else
                 {
-                    currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
+                    // Move to the next patrol point
+                    currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length; 
                 }
             }
-            yield return null;
+            else
+            {
+                // Handle the case where there are no patrol points
+                Debug.LogWarning("No patrol points assigned to " + gameObject.name);
+                yield break; // Stop the coroutine 
+            }
         }
+        yield return null; 
     }
+}
 
     private IEnumerator SlowMotionAndFailureSequence()
 {
