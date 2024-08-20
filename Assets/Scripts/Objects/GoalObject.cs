@@ -5,6 +5,15 @@ public class GoalObject : InteractableObject
     private bool isLarge = false;
     private Rigidbody rb;
 
+    private void Awake()
+    {
+        if (!GetComponent<Collider>())
+        {
+            gameObject.AddComponent<BoxCollider>();
+            GetComponent<Collider>().isTrigger = false; 
+        }
+    }    
+    
     protected override void Start()
     {
         base.Start(); // Call the Start method of the parent class
@@ -40,7 +49,7 @@ public class GoalObject : InteractableObject
     }
 
     public bool IsLarge() 
-{
-    return isLarge; // Return true if the object is large
-}
+    {
+        return isLarge; // Return true if the object is large
+    }
 }

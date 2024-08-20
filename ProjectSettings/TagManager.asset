@@ -11,6 +11,8 @@ TagManager:
   - Ground
   - Enemy
   - Door
+  - NPC
+  - BreakableObject
   layers:
   - Default
   - TransparentFX

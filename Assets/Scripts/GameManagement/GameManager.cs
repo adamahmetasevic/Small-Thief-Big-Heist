@@ -39,6 +39,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ResetTimer(); 
+    }
     public void AlertAllEnemies()
     {
         objectMadeBig = true;
